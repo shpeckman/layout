@@ -2,7 +2,7 @@
 class Layout::Runtime
   alias Intent = Engine ->
 
-  CONTEXT_NAME = "asekii:layout"
+  CONTEXT_NAME = "terminal:layout"
   INTENT_CAP   = 256
   FRAME_CAP    =  64
 
