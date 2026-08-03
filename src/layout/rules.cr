@@ -54,13 +54,17 @@ module Layout
   end
 
   struct Change
-    getter window       : Window
-    getter previous     : Rect
-    getter rect         : Rect
-    getter? was_visible : Bool
-    getter? visible     : Bool
+    getter id             : Int32
+    getter layer          : Layer
+    getter previous       : Rect
+    getter rect           : Rect
+    getter previous_pixel : PixelRect
+    getter pixel          : PixelRect
+    getter? was_visible   : Bool
+    getter? visible       : Bool
 
-    def initialize(@window : Window, @previous : Rect, @rect : Rect,
+    def initialize(@id : Int32, @layer : Layer, @previous : Rect, @rect : Rect,
+                   @previous_pixel : PixelRect, @pixel : PixelRect,
                    @was_visible : Bool, @visible : Bool)
     end
 
@@ -68,8 +72,20 @@ module Layout
       previous != rect
     end
 
+    def shifted? : Bool
+      previous_pixel != pixel
+    end
+
     def visibility_changed? : Bool
       was_visible? != visible?
+    end
+
+    def appeared? : Bool
+      !was_visible? && visible?
+    end
+
+    def vanished? : Bool
+      was_visible? && !visible?
     end
   end
 

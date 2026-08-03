@@ -11,7 +11,7 @@ module Layout
 
     def initialize(@id : Int32, @name : String? = nil,
                    @windows : Array(Window) = [] of Window,
-                   @active : Int32 = 0, @rect : Rect = Rect.new,
+                   @active : Int32 = 0, @rect : Rect = Rect::EMPTY,
                    @sizing : Sizing = Sizing.new, @tab_rows : Int32 = 0)
     end
 
@@ -111,7 +111,7 @@ module Layout
 
     def initialize(@id : Int32, @direction : Direction,
                    @children : Array(Node) = [] of Node,
-                   @rect : Rect = Rect.new, @sizing : Sizing = Sizing.new)
+                   @rect : Rect = Rect::EMPTY, @sizing : Sizing = Sizing.new)
     end
 
     def same?(other : Node) : Bool

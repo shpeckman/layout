@@ -9,6 +9,8 @@ module Layout
     def initialize(@x : Int32 = 0, @y : Int32 = 0, @cols : Int32 = 0, @rows : Int32 = 0)
     end
 
+    EMPTY = Rect.new
+
     def right : Int32
       x + cols
     end
@@ -111,6 +113,29 @@ module Layout
     getter height : Int32
 
     def initialize(@x : Int32 = 0, @y : Int32 = 0, @width : Int32 = 0, @height : Int32 = 0)
+    end
+  end
+
+  struct PixelOffset
+    getter x : Int32
+    getter y : Int32
+
+    def initialize(@x : Int32 = 0, @y : Int32 = 0)
+    end
+
+    ZERO = PixelOffset.new
+
+    def zero? : Bool
+      x == 0 && y == 0
+    end
+
+    def clamp(cell : CellSize) : PixelOffset
+      PixelOffset.new(bound(x, cell.width), bound(y, cell.height))
+    end
+
+    private def bound(value : Int32, limit : Int32) : Int32
+      return 0 if limit <= 1 || value <= 0
+      value < limit ? value : limit - 1
     end
   end
 

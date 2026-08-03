@@ -20,7 +20,7 @@ class Layout::Engine
     @last_resolution = nil
     @dirty           = true
     @changes         = [] of Change
-    @snapshot        = [] of Tuple(Window, Rect, Bool)
+    @snapshot        = [] of Tuple(Window, Rect, PixelRect, Layer, Bool)
     @buffer          = [] of Window
     @scratchpads     = {} of String => Scratchpad
     count            = workspaces > 0 ? workspaces : 1
@@ -475,6 +475,19 @@ class Layout::Engine
     node.sizing = node.sizing.with_max(span)
     @dirty = true
     Status::Changed
+  end
+
+  def set_offset(window_id : Int32, offset : PixelOffset) : Status
+    target = window(window_id)
+    return Status::Missing unless target
+    return Status::Unchanged if target.offset == offset
+    target.offset = offset
+    @dirty = true
+    Status::Changed
+  end
+
+  def set_offset(window_id : Int32, x : Int32, y : Int32) : Status
+    set_offset(window_id, PixelOffset.new(x, y))
   end
 
   def resize_window(window_id : Int32, delta : Int32) : Status
@@ -1319,10 +1332,13 @@ class Layout::Engine
   end
 
   private def place_window(window : Window, rect : Rect, visible : Bool) : Nil
-    cell = screen.cell
+    cell   = screen.cell
+    origin = screen.origin
+    offset = window.offset.clamp(cell)
     window.rect = rect
     window.visible = visible
-    window.pixel = PixelRect.new(rect.x * cell.width, rect.y * cell.height,
+    window.pixel = PixelRect.new((rect.x - origin) * cell.width + offset.x,
+      (rect.y - origin) * cell.height + offset.y,
       rect.cols * cell.width, rect.rows * cell.height)
   end
 
@@ -1458,14 +1474,18 @@ class Layout::Engine
     @snapshot.clear
     @buffer.clear
     collect_all(@buffer)
-    @buffer.each { |window| @snapshot << {window, window.rect, window.visible?} }
+    @buffer.each do |window|
+      @snapshot << {window, window.rect, window.pixel, window.layer, window.visible?}
+    end
   end
 
   private def diff : Nil
     @snapshot.each do |entry|
-      window, rect, visible = entry
-      next if window.rect == rect && window.visible? == visible
-      @changes << Change.new(window, rect, window.rect, visible, window.visible?)
+      window, rect, pixel, layer, visible = entry
+      next if window.rect == rect && window.pixel == pixel &&
+              window.layer == layer && window.visible? == visible
+      @changes << Change.new(window.id, window.layer, rect, window.rect,
+        pixel, window.pixel, visible, window.visible?)
     end
   end
 end

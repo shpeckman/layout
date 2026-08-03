@@ -8,6 +8,7 @@ class Layout::Window
   property rect       : Rect
   property sizing     : Sizing
   property pixel      : PixelRect
+  property offset     : PixelOffset
   property parent     : Int32?
   property strut      : Strut?
   property scratchpad : String?
@@ -18,8 +19,9 @@ class Layout::Window
 
   def initialize(@id : Int32, @app_id : String, @title : String,
                  @tag : String? = nil, @layer : Layer = Layer::Tiled,
-                 @rect : Rect = Rect.new, @sizing : Sizing = Sizing.new,
-                 @pixel : PixelRect = PixelRect.new, @parent : Int32? = nil,
+                 @rect : Rect = Rect::EMPTY, @sizing : Sizing = Sizing.new,
+                 @pixel : PixelRect = PixelRect.new,
+                 @offset : PixelOffset = PixelOffset::ZERO, @parent : Int32? = nil,
                  @strut : Strut? = nil, @scratchpad : String? = nil,
                  @mode : Mode = Mode::Normal, @sticky : Bool = false,
                  @hidden : Bool = false, @visible : Bool = false)
