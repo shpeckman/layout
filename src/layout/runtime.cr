@@ -66,13 +66,8 @@ class Layout::Runtime
     submit(intent)
   end
 
-  def resize(cols : Int32, rows : Int32, cell_width : Int32 = 0,
-             cell_height : Int32 = 0) : Bool
+  def resize(cols : Int32, rows : Int32) : Bool
     submit do |engine|
-      if cell_width > 0 && cell_height > 0
-        engine.screen.cell = CellSize.new(cell_width, cell_height)
-        engine.dirty!
-      end
       engine.resize_screen(cols, rows)
     end
   end
@@ -114,3 +109,4 @@ class Layout::Runtime
   rescue Channel::ClosedError
   end
 end
+

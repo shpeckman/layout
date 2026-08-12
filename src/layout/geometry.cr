@@ -98,47 +98,6 @@ module Layout
     end
   end
 
-  struct CellSize
-    getter width  : Int32
-    getter height : Int32
-
-    def initialize(@width : Int32 = 1, @height : Int32 = 1)
-    end
-  end
-
-  struct PixelRect
-    getter x      : Int32
-    getter y      : Int32
-    getter width  : Int32
-    getter height : Int32
-
-    def initialize(@x : Int32 = 0, @y : Int32 = 0, @width : Int32 = 0, @height : Int32 = 0)
-    end
-  end
-
-  struct PixelOffset
-    getter x : Int32
-    getter y : Int32
-
-    def initialize(@x : Int32 = 0, @y : Int32 = 0)
-    end
-
-    ZERO = PixelOffset.new
-
-    def zero? : Bool
-      x == 0 && y == 0
-    end
-
-    def clamp(cell : CellSize) : PixelOffset
-      PixelOffset.new(bound(x, cell.width), bound(y, cell.height))
-    end
-
-    private def bound(value : Int32, limit : Int32) : Int32
-      return 0 if limit <= 1 || value <= 0
-      value < limit ? value : limit - 1
-    end
-  end
-
   struct Sizing
     getter weight : Int32
     getter fixed  : Int32?
@@ -193,3 +152,4 @@ module Layout
     end
   end
 end
+
