@@ -19,8 +19,8 @@ class Layout::Runtime
   @phase   : Atomic(Phase)
   @context : Fiber::ExecutionContext::Isolated?
 
-  def initialize(@engine : Engine = Engine.new,
-                 intent_cap : Int32 = INTENT_CAP, frame_cap : Int32 = FRAME_CAP)
+  def initialize(@engine    : Engine = Engine.new,
+                 intent_cap : Int32  = INTENT_CAP, frame_cap : Int32 = FRAME_CAP)
     @intents = Channel(Intent).new(intent_cap)
     @frames  = Channel(Array(Change)).new(frame_cap)
     @phase   = Atomic(Phase).new(Phase::Idle)
@@ -109,4 +109,3 @@ class Layout::Runtime
   rescue Channel::ClosedError
   end
 end
-

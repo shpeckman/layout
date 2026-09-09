@@ -15,4 +15,3 @@ class Layout::Screen
     Rect.new(origin, origin, cols, rows)
   end
 end
-

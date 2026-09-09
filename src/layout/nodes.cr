@@ -11,7 +11,7 @@ module Layout
 
     def initialize(@id : Int32, @name : String? = nil,
                    @windows : Array(Window) = [] of Window,
-                   @active : Int32 = 0, @rect : Rect = Rect::EMPTY,
+                   @active  : Int32         = 0, @rect : Rect = Rect::EMPTY,
                    @sizing : Sizing = Sizing.new, @tab_rows : Int32 = 0)
     end
 
@@ -109,9 +109,11 @@ module Layout
     property rect    : Rect
     property sizing  : Sizing
 
-    def initialize(@id : Int32, @direction : Direction,
-                   @children : Array(Node) = [] of Node,
-                   @rect : Rect = Rect::EMPTY, @sizing : Sizing = Sizing.new)
+    def initialize(@id        : Int32,
+                   @direction : Direction,
+                   @children  : Array(Node) = [] of Node,
+                   @rect      : Rect   = Rect::EMPTY,
+                   @sizing    : Sizing = Sizing.new)
     end
 
     def same?(other : Node) : Bool

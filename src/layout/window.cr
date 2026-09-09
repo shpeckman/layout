@@ -40,4 +40,3 @@ class Layout::Window
     !parent.nil?
   end
 end
-

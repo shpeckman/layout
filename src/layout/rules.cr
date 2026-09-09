@@ -98,4 +98,3 @@ module Layout
     end
   end
 end
-

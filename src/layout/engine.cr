@@ -12,9 +12,9 @@ class Layout::Engine
   getter? dirty          : Bool
 
   def initialize(@screen : Screen = Screen.new, @rules : Array(Rule) = [] of Rule,
-                 @default_stack : String = "main",
-                 @direction : Direction = Direction::Horizontal,
-                 workspaces : Int32 = 1)
+                 @default_stack : String    = "main",
+                 @direction     : Direction = Direction::Horizontal,
+                 workspaces     : Int32     = 1)
     @next_id         = 0
     @active          = 0
     @last_resolution = nil
@@ -1469,4 +1469,3 @@ class Layout::Engine
     end
   end
 end
-
