@@ -107,4 +107,34 @@ module Example
       line("##{change.id.to_s.ljust(3)} #{kind(change).ljust(10)} #{area(change.previous)} -> #{area(change.rect)}")
     end
   end
+
+  def tree(engine : Engine) : Nil
+    if root = engine.current.tiled.root
+      line("Workspace #{engine.active}")
+      tree_node(root, "   ", true)
+    else
+      line("Workspace #{engine.active} (Empty)")
+    end
+  end
+
+  def tree_node(node : Node, prefix : String, is_last : Bool) : Nil
+    marker = is_last ? "└── " : "├── "
+    child_prefix = prefix + (is_last ? "    " : "│   ")
+
+    case node
+    in Split
+      puts "#{prefix}#{marker}Split(#{node.direction})"
+      node.children.each_with_index do |child, index|
+        tree_node(child, child_prefix, index == node.children.size - 1)
+      end
+    in Stack
+      puts "#{prefix}#{marker}Stack(#{node.name || "unnamed"})"
+      node.windows.each_with_index do |window, index|
+        win_marker = index == node.size - 1 ? "└── " : "├── "
+        active = node.active_window.try(&.same?(window)) ? "*" : " "
+        puts "#{child_prefix}#{win_marker}#{active}[#{window.id}] #{window.title}"
+      end
+    end
+  end
 end
+
